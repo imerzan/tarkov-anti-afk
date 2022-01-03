@@ -45,6 +45,7 @@ Func main()
 			Send ("{S UP}")
 		 EndIf
 
+		 Opt("SendKeyDownDelay", 5) ;; Reset delay (for enter key)
 		 $Forward = Not $Forward ;; Flip variable for next run
 
 		 ;; Wait for next loop
