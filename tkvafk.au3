@@ -1,25 +1,17 @@
 ;;; Can run from launcher, will start once game is running if you go AFK during Queue
-;;; Will click the Character button to open your inventory (May need a backpack/rig on)
-;;; Will then click an item in the first inventory slot (top-left), and move it one square to the right.
-;;; On the next loop it will move the item bak to the first slot. Rinse repeat.
-;;; Coordinates set for 1080P resolution
+;;; Will click the Hideout Button and hit Enter to go first person
+;;; Will move you around forwards/backwards in your hideout
+;;; Hideout Coordinates set for 1080P resolution
 ;;; By LoneSurvivor
 #include <Misc.au3>
 _Singleton ( "7UZnCR6mep-tKCsqVLDil", 0 ) ;; Allow only one instance to run
 AutoItSetOption ( "TrayAutoPause" , 0 ) ;; Prevent Tray Auto-Pause
 HotKeySet ( "{F11}", "Toggle" ) ;; Use whichever Hotkey you want
 Global $Enabled = False ;; Disabled at start
-Global $InFirstSlot = True; ;; Start with inventory slot 1
-
-Global $charButton[2] ;; Coordinates of Character Button
-$charButton[0] = 960 ;; x
-$charButton[1] = 730 ;; y
-Global $invTile1[2] ;; Coordinates of inventory tile 1
-$invTile1[0] = 1299 ;; x
-$invTile1[1] = 107 ;; y
-Global $invTile2[2] ;; Coordinates of inventory tile 2
-$invTile2[0] = 1363 ;; x
-$invTile2[1] = 112 ;; y
+Global $Forward = True ;; Start with moving forward
+Global $hideoutButton[2] ;; Coordinates of Hideout Button
+$hideoutButton[0] = 960 ;; x
+$hideoutButton[1] = 871 ;; y
 
 HotKeySet ( "{F11}", "Toggle" )
 Exit ( main() )
@@ -29,26 +21,34 @@ Global
 Func main()
    While 1
 	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
-		 ;; Click character button
-		 Local $charClickDelay = Random(10, 50, 1)
-		 MouseClick("LEFT", $charButton[0], $charButton[1], $charClickDelay)
+		 ;; Click hideout button
+		 Local $hideoutClickDelay = Random(10, 50, 1)
+		 MouseClick("LEFT", $hideoutButton[0], $hideoutButton[1], $hideoutClickDelay)
 
-		 ;; Wait for inventory
+		 ;; Wait for hideout
 		 Local $waitDelay = Random(5000, 7000)
 		 Sleep ($waitDelay)
+		 ;; Press Enter to go first person
+		 Send("{ENTER}")
 
-		 If $InFirstSlot Then
-			;; Click first inventory slot then drag to second
-			Local $clickDragDelay = Random(10, 50, 1)
-			MouseClickDrag ( "LEFT", $invTile1[0], $invTile1[1], $invTile2[0], $invTile2[1], $clickDragDelay)
+		 If $Forward Then
+			;; Move forward a bit
+			Local $keydownDelay = Random(2000, 4000, 1)
+			Opt("SendKeyDownDelay", $keydownDelay)
+			Send("{W DOWN}")
+			Send ("{W UP}")
 		 Else
-			;; Click second inventory slot then drag to first
-			Local $clickDragDelay = Random(10, 50, 1)
-			MouseClickDrag ( "LEFT", $invTile2[0], $invTile2[1], $invTile1[0], $invTile1[1], $clickDragDelay)
+			;; Move backwards a bit
+			Local $keydownDelay = Random(2000, 4000, 1)
+			Opt("SendKeyDownDelay", $keydownDelay)
+			Send("{S DOWN}")
+			Send ("{S UP}")
 		 EndIf
 
+		 $Forward = Not $Forward ;; Flip variable for next run
+
 		 ;; Wait for next loop
-		 Local $sleepDelay = Random(60000, 90000, 1) ;; 60-90 sec between runs
+		 Local $sleepDelay = Random(60000, 90000, 1) ;; 60-90 sec between moving
 		 Sleep ($sleepDelay)
 	  WEnd
 	  Sleep(10)
