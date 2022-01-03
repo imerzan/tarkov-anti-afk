@@ -31,7 +31,8 @@ Func main()
 		 ;; Press Enter to go first person
 		 Local $enterDelay = Random(75, 125)
 		 Opt("SendKeyDownDelay", $enterDelay)
-		 Send("{ENTER}")
+		 Send("{ENTER DOWN}")
+		 Send("{ENTER UP}")
 
 		 ;; Set random delay
 		 Local $movementDuration = Random(2000, 4000, 1)
