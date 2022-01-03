@@ -9,9 +9,9 @@ AutoItSetOption ( "TrayAutoPause" , 0 ) ;; Prevent Tray Auto-Pause
 HotKeySet ( "{F11}", "Toggle" ) ;; Use whichever Hotkey you want
 Global $Enabled = False ;; Disabled at start
 Global $Forward = True ;; Start with moving forward
-Global $hideoutButton[2] ;; Coordinates of Hideout Button
-$hideoutButton[0] = 960 ;; x
-$hideoutButton[1] = 871 ;; y
+Global $HideoutButton[2] ;; Coordinates of Hideout Button
+$HideoutButton[0] = 960 ;; x
+$HideoutButton[1] = 871 ;; y
 
 HotKeySet ( "{F11}", "Toggle" )
 Exit ( main() )
@@ -23,32 +23,32 @@ Func main()
 	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
 		 ;; Click hideout button
 		 Local $hideoutClickDelay = Random(10, 50, 1)
-		 MouseClick("LEFT", $hideoutButton[0], $hideoutButton[1], $hideoutClickDelay)
+		 MouseClick("LEFT", $HideoutButton[0], $HideoutButton[1], $hideoutClickDelay)
 
 		 ;; Wait for hideout
 		 Local $waitDelay = Random(5000, 7000)
 		 Sleep ($waitDelay)
 		 ;; Press Enter to go first person
+		 Local $enterDelay = Random(75, 125)
+		 Opt("SendKeyDownDelay", $enterDelay)
 		 Send("{ENTER}")
+
+		 ;; Set random delay
+		 Local $movementDuration = Random(2000, 4000, 1)
+		 Opt("SendKeyDownDelay", $movementDuration)
 
 		 If $Forward Then
 			;; Move forward a bit
-			Local $keydownDelay = Random(2000, 4000, 1)
-			Opt("SendKeyDownDelay", $keydownDelay)
 			Send("{W DOWN}")
 			Send ("{W UP}")
 		 Else
 			;; Move backwards a bit
-			Local $keydownDelay = Random(2000, 4000, 1)
-			Opt("SendKeyDownDelay", $keydownDelay)
 			Send("{S DOWN}")
 			Send ("{S UP}")
 		 EndIf
 
-		 Opt("SendKeyDownDelay", 5) ;; Reset delay (for enter key)
-		 $Forward = Not $Forward ;; Flip variable for next run
-
-		 ;; Wait for next loop
+		 ;; Prepare for next loop
+		 $Forward = Not $Forward
 		 Local $sleepDelay = Random(60000, 90000, 1) ;; 60-90 sec between moving
 		 Sleep ($sleepDelay)
 	  WEnd
