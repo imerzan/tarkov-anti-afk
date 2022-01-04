@@ -5,7 +5,7 @@
 ;;; Randomization employed to appear as humanlike as possible.
 ;;; By LoneSurvivor
 #include <Misc.au3>
-_Singleton ( "7UZnCR6mep-" & @UserName, 0 ) ;; Allow only one instance to run
+_Singleton ( "88gbI0VrVt-" & @UserName, 0 ) ;; Allow only one instance to run
 AutoItSetOption ( "TrayAutoPause" , 0 ) ;; Prevent Tray Auto-Pause
 
 Global $Enabled = False ;; Disabled at start
