@@ -20,8 +20,6 @@ $HideoutButtonMax[1] = 885 ;; y
 HotKeySet ( "{F11}", "Toggle" ) ;; Use whichever Hotkey you want
 Exit ( main() ) ;; Startup
 
-Global
-
 Func main()
    While 1
 	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
