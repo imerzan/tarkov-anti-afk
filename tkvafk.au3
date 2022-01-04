@@ -2,19 +2,23 @@
 ;;; Will click the Hideout Button and hit Enter to go first person
 ;;; Will move you around forwards/backwards in your hideout
 ;;; Hideout Coordinates set for 1080P resolution
+;;; Randomization employed to appear as humanlike as possible.
 ;;; By LoneSurvivor
 #include <Misc.au3>
-_Singleton ( "7UZnCR6mep-tKCsqVLDil", 0 ) ;; Allow only one instance to run
+_Singleton ( "7UZnCR6mep-" & @UserName, 0 ) ;; Allow only one instance to run
 AutoItSetOption ( "TrayAutoPause" , 0 ) ;; Prevent Tray Auto-Pause
-HotKeySet ( "{F11}", "Toggle" ) ;; Use whichever Hotkey you want
+
 Global $Enabled = False ;; Disabled at start
 Global $Forward = True ;; Start with moving forward
-Global $HideoutButton[2] ;; Coordinates of Hideout Button
-$HideoutButton[0] = 960 ;; x
-$HideoutButton[1] = 871 ;; y
+Global $HideoutButtonMin[2] ;; Minimum Coordinates of Hideout Button
+$HideoutButtonMin[0] = 882 ;; x
+$HideoutButtonMin[1] = 851 ;; y
+Global $HideoutButtonMax[2] ;; Maximum Coordinates of Hideout Button
+$HideoutButtonMax[0] = 1031 ;; x
+$HideoutButtonMax[1] = 885 ;; y
 
-HotKeySet ( "{F11}", "Toggle" )
-Exit ( main() )
+HotKeySet ( "{F11}", "Toggle" ) ;; Use whichever Hotkey you want
+Exit ( main() ) ;; Startup
 
 Global
 
@@ -23,13 +27,16 @@ Func main()
 	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
 		 ;; Click hideout button
 		 Local $hideoutClickDelay = Random(10, 50, 1)
-		 MouseClick("LEFT", $HideoutButton[0], $HideoutButton[1], $hideoutClickDelay)
+		 Local $hideoutClickPos[2] ;; Randomize click location within a bounds
+		 $hideoutClickPos[0] = Random($HideoutButtonMin[0], $HideoutButtonMax[0], 1)
+		 $hideoutClickPos[1] = Random($HideoutButtonMin[1], $HideoutButtonMax[1], 1)
+		 MouseClick("LEFT", $hideoutClickPos[0], $hideoutClickPos[1], $hideoutClickDelay)
 
 		 ;; Wait for hideout
-		 Local $waitDelay = Random(5000, 7000)
+		 Local $waitDelay = Random(2000, 4500)
 		 Sleep ($waitDelay)
 		 ;; Press Enter to go first person
-		 Local $enterDelay = Random(75, 125)
+		 Local $enterDelay = Random(75, 150)
 		 Opt("SendKeyDownDelay", $enterDelay)
 		 Send("{ENTER DOWN}")
 		 Send("{ENTER UP}")
@@ -49,12 +56,13 @@ Func main()
 		 EndIf
 
 		 ;; Prepare for next loop
-		 $Forward = Not $Forward
-		 Local $sleepDelay = Random(60000, 90000, 1) ;; 60-90 sec between moving
+		 $Forward = Not $Forward ;; Flip movement direction for next loop
+		 Local $sleepDelay = Random(60000, 90000, 1) ;; 60-90 sec between movement
 		 Sleep ($sleepDelay)
 	  WEnd
-	  Sleep(10)
+	  Sleep(10) ;; CPU Idle
    WEnd
+   Return 0
 EndFunc
 
 
