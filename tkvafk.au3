@@ -1,11 +1,10 @@
-;;; Can run from launcher, will start once game is running if you go AFK during Queue
 ;;; Will click the Hideout Button and hit Enter to go first person
 ;;; Will move you around forwards/backwards in your hideout
 ;;; Hideout Coordinates set for 1080P resolution
 ;;; Randomization employed to appear as humanlike as possible.
 ;;; By LoneSurvivor
 #include <Misc.au3>
-_Singleton ( "88gbI0VrVt-" & @UserName, 0 ) ;; Allow only one instance to run
+_Singleton ( "hAXmL6vvhCesOuz2kr8jRaaqhzOKD9Dn-" & @UserName, 0 ) ;; Allow only one instance to run
 AutoItSetOption ( "TrayAutoPause" , 0 ) ;; Prevent Tray Auto-Pause
 
 Global $Enabled = False ;; Disabled at start
@@ -22,7 +21,7 @@ Exit ( main() ) ;; Startup
 
 Func main()
    While 1
-	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
+	  While $Enabled
 		 ;; Click hideout button
 		 Local $hideoutClickDelay = Random(10, 50, 1)
 		 Local $hideoutClickPos[2] ;; Randomize click location within a bounds
