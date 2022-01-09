@@ -1,3 +1,4 @@
+;;; Can run from launcher, will start once game is running if you go AFK during Queue
 ;;; Will click the Hideout Button and hit Enter to go first person
 ;;; Will move you around forwards/backwards in your hideout
 ;;; Hideout Coordinates set for 1080P resolution
@@ -21,7 +22,7 @@ Exit ( main() ) ;; Startup
 
 Func main()
    While 1
-	  While $Enabled
+	  While $Enabled And WinActive("EscapeFromTarkov") <> 0
 		 ;; Click hideout button
 		 Local $hideoutClickDelay = Random(10, 50, 1)
 		 Local $hideoutClickPos[2] ;; Randomize click location within a bounds
